@@ -1,4 +1,4 @@
-0a4ec1942ede4ad9a41f2af10599b1ea *DESCRIPTION
+6a47182941f257db858a359c6f634a9c *DESCRIPTION
 bfa68725fe940e8220bf6e4395154251 *NAMESPACE
 b5c85c07b551448be7d328a333563e5b *R/RcppExports.R
 4b4e09320ceac370d54425102cca2e86 *R/derivative.R
@@ -16,7 +16,7 @@ cd04046570f1c782e048d5e961f10564 *R/hermite.R
 cbe249c56d4ecbf40d5b8f6ec2e43471 *R/taylor.R
 bc84fe0dc11edbd8c0778e379c8af4b8 *R/trace.R
 3b6b5ab7e29a38963b4557246a042bf5 *R/utilities.R
-1ee0835d68403eb161684de9fc896a6b *README.md
+0e2d261dd6069f33554aa8821e877c99 *README.md
 7de235d7ff564018703a28c4cf0bce9c *man/c2e.Rd
 a6b62828e2c141658ee3fb1149927169 *man/cross.Rd
 a3e911ed9ccddd8f97a14693e6f0694f *man/curl.Rd
@@ -50,4 +50,4 @@ fb989572c686b736cd08f3ebfc4e015b *man/partitions.Rd
 a22c0572ad60edd7858b7b08e658e924 *man/trace.Rd
 ffbee24100e272ae169711ad06ade686 *man/wrap.Rd
 76682100006f7acdd9cba77d0f6163ed *src/RcppExports.cpp
-383d1022aaba0c88c2a3b4f303480b25 *src/calculus.cpp
+3bdf4e13a39ba9f191c26e8f9e5cf779 *src/calculus.cpp
