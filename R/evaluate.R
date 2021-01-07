@@ -1,88 +1,79 @@
-#' Numerical Evaluation
+#' Evaluate Characters and Expressions
 #' 
-#' Evaluate an array of characters, expressions or functions.
+#' Evaluates an array of \code{characters} or \code{expressions}.
 #' 
-#' @param x an object to be evaluated: array of characters, expressions or functions.
-#' @param envir the \code{\link[base]{environment}} in which \code{x} is to be evaluated. May also be \code{NULL}, a list, a data frame, a pairlist or an integer as specified to \code{\link[base]{sys.call}}.
-#' @param enclos relevant when \code{envir} is a (pair)list or a data frame. Specifies the enclosure, i.e., where \code{R} looks for objects not found in \code{envir}. This can be \code{NULL} (interpreted as the base package environment, \code{\link[base]{baseenv}()}) or an environment.
-#' @param simplify logical. Simplify the output? If \code{FALSE}, return a \code{list}.
+#' @param f array of \code{characters} or \code{expressions} to be evaluated.
+#' @param var named vector or \code{data.frame} in which \code{f} is to be evaluated.
+#' @param params \code{list} of additional parameters passed to \code{f}.
+#' @param vectorize \code{logical}. Use vectorization? If \code{TRUE}, it can significantly boost performance but \code{f} needs to handle the vector of inputs appropriately.
 #' 
-#' @return evaluated object.
+#' @return Evaluated object. When \code{var} is a named vector, the return is an array 
+#' with the same dimensions of \code{f}. When \code{var} is a \code{data.frame}, the
+#' return is a \code{matrix} with columns corresponding to the entries of \code{f} and 
+#' rows corresponding to the rows of \code{var}.
 #' 
 #' @examples 
-#' ##################################
-#' # Evaluate an array of characters
-#' #
+#' ### single evaluation
+#' f <- array(letters[1:4], dim = c(2,2))
+#' var <- c(a = 1, b = 2, c = 3, d = 4)
+#' evaluate(f, var)
 #' 
-#' x <- array(letters[1:4], dim = c(2,2))
+#' ### multiple evaluation
+#' f <- array(letters[1:4], dim = c(2,2))
+#' var <- data.frame(a = 1:3, b = 2:4, c = 3:5, d = 4:6)
+#' evaluate(f, var)
 #' 
-#' e <- list(a = 1, b = 2, c = 3, d = 4)
-#' evaluate(x, env = e)
-#' evaluate(x, env = e, simplify = FALSE)
+#' ### multiple evaluation with additional parameters
+#' f <- "a*sum(x)"
+#' var <- data.frame(a = 1:3)
+#' params <- list(x = 1:3)
+#' evaluate(f, var, params)
 #' 
-#' e <- list(a = 1:3, b = 2, c = 3, d = 4)
-#' evaluate(x, env = e)
-#' evaluate(x, env = e, simplify = FALSE)
-#'
-#'
-#' ##################################
-#' # Evaluate an array of functions
-#' #
+#' ### multiple evaluation of non-vectorized expressions
+#' f <- "a*myf(x)"
+#' myf <- function(x) if(x>0) 1 else -1
+#' var <- data.frame(a = 1:3, x = -1:1)
+#' evaluate(f, var, params = list(myf = myf), vectorize = FALSE)
 #' 
-#' f1 <- function(x,y) sin(x)
-#' f2 <- function(x,y) sin(y)
-#' f3 <- function(x,y) x*y
-#' x <- array(c(f1,f3,f3,f2), dim = c(2,2))
+#' @family utilities
 #' 
-#' e <- list(x = 0, y = pi/2)
-#' evaluate(x, env = e)
-#' evaluate(x, env = e, simplify = FALSE)
+#' @references 
+#' Guidotti, E. (2020). "calculus: High dimensional numerical and symbolic calculus in R". \url{https://arxiv.org/abs/2101.00086}
 #' 
-#' e <- list(x = c(0, pi/2), y = c(0, pi/2))
-#' evaluate(x, env = e)
-#' evaluate(x, env = e, simplify = FALSE)
-#'   
 #' @export
 #' 
-evaluate <- function(x, envir = parent.frame(), enclos = if(is.list(envir) || is.pairlist(envir)) parent.frame() else baseenv(), simplify = TRUE){
+evaluate <- function(f, var, params = list(), vectorize = TRUE){
   
-  if(is.character(x))
-    x <- c2e(x)
+  is_df <- is.data.frame(var)
+  is_num <- is.vector(var, mode = "numeric")
   
-  is.fun <- is.fun(x)
-  if(!is.array(x) && (is.fun || is.expression(x) || is.call(x) || is.symbol(x)))
-    x <- array(c(x))
+  if(!is_num & !is_df)
+    stop("var must be a named vector or data.frame")
   
-  x <- as.array(x)
-  d <- dim(x)
+  if(is.expression(f))
+    f <- e2c(f)
   
-  if(!is.fun) {
-    
-    x <- sapply(x, function(x){
-        eval(expr = x, envir = envir, enclos = enclos)
-    }, simplify = FALSE, USE.NAMES = FALSE)  
-    
+  d <- dim(f)
+  n <- length(f)
+  
+  if(vectorize) {
+    f <- c2e(sprintf("unlist(data.frame(%s), use.names = FALSE, recursive = FALSE)", paste(f, collapse = ",")))
+    x <- eval(f, envir = c(as.list(var), params), enclos = baseenv()) 
+    if(is_num)
+      dim(x) <- d
+    else
+      dim(x) <- c(length(x)/n, n)
   }
   else {
-    
-    x <- sapply(x, function(x){
-        do.call(x, args = envir)
-    }, simplify = FALSE, USE.NAMES = FALSE)
-    
+    m <- nrow(var)
+    x <- matrix(nrow = m, ncol = n)
+    e <- list2env(params, hash = TRUE)
+    f <- c2e(sprintf("c(%s)", paste(f, collapse = ",")))
+    for(i in 1:m){
+      list2env(var[i, , drop = FALSE], envir = e)
+      x[i,] <- eval(f, envir = e, enclos = baseenv())  
+    }
   }
-  
-  
-  x <- as.matrix(as.data.frame(x))
-  colnames(x) <- NULL
-  
-  if(nrow(x)==1 && simplify)
-    return(array(unlist(x), dim = d))
-  
-  if(!simplify) {
-    x <- lapply(1:nrow(x), function(i){
-      array(unlist(x[i,]), dim = d)
-    })  
-  }
-  
+    
   return(x)
 }

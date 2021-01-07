@@ -7,30 +7,42 @@
 x \%prod\% y
 }
 \arguments{
-\item{x}{character or numeric array.}
+\item{x}{\code{numeric} or \code{character} array.}
 
-\item{y}{character or numeric array.}
+\item{y}{\code{numeric} or \code{character} array.}
 }
 \value{
-character or numeric array.
+\code{array}.
 }
 \description{
-Multiplies numeric or character arrays element by element.
+Elementwise product of \code{numeric} or \code{character} arrays.
 }
 \examples{
-# prod vector 
+### vector 
 x <- c("a+1","b+2")
 x \%prod\% x
 
-# prod matrix 
+### matrix 
 x <- matrix(letters[1:4], ncol = 2)
 x \%prod\% x
 
-# prod array
+### array
 x <- array(letters[1:12], dim = c(2,2,3))
 y <- array(1:12, dim = c(2,2,3))
-x \%prod\% x
-y \%prod\% y
 x \%prod\% y
 
 }
+\references{
+Guidotti, E. (2020). "calculus: High dimensional numerical and symbolic calculus in R". \url{https://arxiv.org/abs/2101.00086}
+}
+\seealso{
+Other basic arithmetic: 
+\code{\link{\%diff\%}()},
+\code{\link{\%div\%}()},
+\code{\link{\%dot\%}()},
+\code{\link{\%inner\%}()},
+\code{\link{\%kronecker\%}()},
+\code{\link{\%outer\%}()},
+\code{\link{\%sum\%}()}
+}
+\concept{basic arithmetic}

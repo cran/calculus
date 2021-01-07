@@ -7,23 +7,41 @@
 x \%inner\% y
 }
 \arguments{
-\item{x}{character or numeric array.}
+\item{x}{\code{numeric} or \code{character} array.}
 
-\item{y}{character or numeric array.}
+\item{y}{\code{numeric} or \code{character} array.}
 }
 \value{
-character or numeric.
+\code{numeric} or \code{character}.
 }
 \description{
-Computes the inner product of two character or numeric arrays.
+Computes the inner product of two \code{numeric} or \code{character} arrays.
+}
+\details{
+The inner product between two arrays \code{A} and \code{B} is computed as:
+\deqn{C = \sum_{j_1\dots j_n} A_{j_1\dots j_n}B_{j_1\dots j_n}}
 }
 \examples{
-# numeric inner product 
-x <- array(1:12, dim = c(3,4))
+### numeric inner product 
+x <- array(1:4, dim = c(2,2))
 x \%inner\% x
 
-# symbolic inner product 
-x <- array(letters[1:12], dim = c(3,4))
+### symbolic inner product 
+x <- array(letters[1:4], dim = c(2,2))
 x \%inner\% x
 
 }
+\references{
+Guidotti, E. (2020). "calculus: High dimensional numerical and symbolic calculus in R". \url{https://arxiv.org/abs/2101.00086}
+}
+\seealso{
+Other basic arithmetic: 
+\code{\link{\%diff\%}()},
+\code{\link{\%div\%}()},
+\code{\link{\%dot\%}()},
+\code{\link{\%kronecker\%}()},
+\code{\link{\%outer\%}()},
+\code{\link{\%prod\%}()},
+\code{\link{\%sum\%}()}
+}
+\concept{basic arithmetic}

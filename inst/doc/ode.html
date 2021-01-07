@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Ordinary differential equations</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Ordinary differential equations</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(calculus)</span></code></pre></div>
+<p>The function <a href="https://calculus.guidotti.dev/reference/ode.html"><code>ode</code></a> provides solvers for systems of ordinary differential equations of the type:</p>
+<p><span class="math display">\[
+\frac{dy}{dt} = f(t,y), \quad y(t_0)=y_0
+\]</span></p>
+<p>where <span class="math inline">\(y\)</span> is the vector of state variables. Two solvers are available: the simpler and faster Euler scheme<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> or the more accurate 4-th order Runge-Kutta method<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. Although many packages already exist to solve ordinary differential equations in R<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>, they usually represent the function <span class="math inline">\(f\)</span> either with an R <code>function</code> or with <code>characters</code>. While the representation via R <code>functions</code> is usually more efficient, the symbolic representation is easier to adopt for beginners and more flexible for advanced users to handle systems that might have been generated via symbolic programming. The function <a href="https://calculus.guidotti.dev/reference/ode.html"><code>ode</code></a> supports both the representations and uses hashed <code>environments</code> to improve symbolic evaluations.</p>
+<div id="examples" class="section level2">
+<h2>Examples</h2>
+<p>The vector-valued function <span class="math inline">\(f\)</span> representing the system can be specified as a vector of <code>characters</code>, or a <code>function</code> returning a numeric vector, giving the values of the derivatives at time <span class="math inline">\(t\)</span>. The initial conditions are set with the argument <code>var</code> and the time variable can be specified with <code>timevar</code>.</p>
+<div id="symbolic-system" class="section level3">
+<h3>Symbolic system</h3>
+<p><span class="math display">\[
+\frac{dx}{dt}=x, \quad x_0 = 1
+\]</span></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>f &lt;-<span class="st"> &quot;x&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>var &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">x=</span><span class="dv">1</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="op">*</span>pi, <span class="dt">by=</span><span class="fl">0.001</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>x &lt;-<span class="st"> </span><span class="kw">ode</span>(<span class="dt">f =</span> f, <span class="dt">var =</span> var, <span class="dt">times =</span> times)</span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="kw">plot</span>(times, x, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="time-dependent-system" class="section level3">
+<h3>Time dependent system</h3>
+<p><span class="math display">\[
+\frac{dx}{dt}=\cos(t), \quad x_0 = 0
+\]</span></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>f &lt;-<span class="st"> &quot;cos(t)&quot;</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>var &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">x=</span><span class="dv">0</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="op">*</span>pi, <span class="dt">by=</span><span class="fl">0.001</span>)</span>
+<span id="cb3-4"><a href="#cb3-4"></a>x &lt;-<span class="st"> </span><span class="kw">ode</span>(<span class="dt">f =</span> f, <span class="dt">var =</span> var, <span class="dt">times =</span> times, <span class="dt">timevar =</span> <span class="st">&quot;t&quot;</span>)</span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="kw">plot</span>(times, x, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="multivariate-system" class="section level3">
+<h3>Multivariate system</h3>
+<p><span class="math display">\[
+\frac{d}{dt}
+\begin{bmatrix}
+x\\
+y
+\end{bmatrix}=
+\begin{bmatrix}
+x\\
+x(1+\cos(10t))
+\end{bmatrix}, \quad
+\begin{bmatrix}
+x_0\\y_0
+\end{bmatrix}=
+\begin{bmatrix}
+1\\1
+\end{bmatrix}
+\]</span></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>f &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;x*(1+cos(10*t))&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>var &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">x=</span><span class="dv">1</span>, <span class="dt">y=</span><span class="dv">1</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a>times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="op">*</span>pi, <span class="dt">by=</span><span class="fl">0.001</span>)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>x &lt;-<span class="st"> </span><span class="kw">ode</span>(<span class="dt">f =</span> f, <span class="dt">var =</span> var, <span class="dt">times =</span> times, <span class="dt">timevar =</span> <span class="st">&quot;t&quot;</span>)</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="kw">matplot</span>(times, x, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lty =</span> <span class="dv">1</span>, <span class="dt">col =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="numerical-system" class="section level3">
+<h3>Numerical system</h3>
+<p><span class="math display">\[
+\frac{d}{dt}
+\begin{bmatrix}
+x\\
+y
+\end{bmatrix}=
+\begin{bmatrix}
+x\\
+y
+\end{bmatrix}, \quad
+\begin{bmatrix}
+x_0\\y_0
+\end{bmatrix}=
+\begin{bmatrix}
+1\\2
+\end{bmatrix}
+\]</span></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>f &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) <span class="kw">c</span>(x, y)</span>
+<span id="cb5-2"><a href="#cb5-2"></a>var &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">x=</span><span class="dv">1</span>, <span class="dt">y=</span><span class="dv">2</span>)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="op">*</span>pi, <span class="dt">by=</span><span class="fl">0.001</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a>x &lt;-<span class="st"> </span><span class="kw">ode</span>(<span class="dt">f =</span> f, <span class="dt">var =</span> var, <span class="dt">times =</span> times)</span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="kw">matplot</span>(times, x, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lty =</span> <span class="dv">1</span>, <span class="dt">col =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="vectorized-interface" class="section level3">
+<h3>Vectorized interface</h3>
+<p><span class="math display">\[
+\frac{d}{dt}
+\begin{bmatrix}
+x\\
+y\\
+z
+\end{bmatrix}=
+\begin{bmatrix}
+x\\
+y\\
+y*(1+cos(10*t))
+\end{bmatrix}, \quad
+\begin{bmatrix}
+x_0\\y_0\\z_0
+\end{bmatrix}=
+\begin{bmatrix}
+1\\2\\2
+\end{bmatrix}
+\]</span></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>f &lt;-<span class="st"> </span><span class="cf">function</span>(x, t) <span class="kw">c</span>(x[<span class="dv">1</span>], x[<span class="dv">2</span>], x[<span class="dv">2</span>]<span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="kw">cos</span>(<span class="dv">10</span><span class="op">*</span>t)))</span>
+<span id="cb6-2"><a href="#cb6-2"></a>var &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="op">*</span>pi, <span class="dt">by=</span><span class="fl">0.001</span>)</span>
+<span id="cb6-4"><a href="#cb6-4"></a>x &lt;-<span class="st"> </span><span class="kw">ode</span>(<span class="dt">f =</span> f, <span class="dt">var =</span> var, <span class="dt">times =</span> times, <span class="dt">timevar =</span> <span class="st">&quot;t&quot;</span>)</span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="kw">matplot</span>(times, x, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lty =</span> <span class="dv">1</span>, <span class="dt">col =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+</div>
+<div id="cite-as" class="section level2">
+<h2>Cite as</h2>
+<p><em>Guidotti, E. (2020). “calculus: High dimensional numerical and symbolic calculus in R”. <a href="https://arxiv.org/abs/2101.00086" class="uri">https://arxiv.org/abs/2101.00086</a></em></p>
+<p>A BibTeX entry for LaTeX users is</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode latex"><code class="sourceCode latex"><span id="cb7-1"><a href="#cb7-1"></a>@Misc{,</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    title = {calculus: High Dimensional Numerical and Symbolic Calculus in R},</span>
+<span id="cb7-3"><a href="#cb7-3"></a>    author = {Emanuele Guidotti},</span>
+<span id="cb7-4"><a href="#cb7-4"></a>    year = {2020},</span>
+<span id="cb7-5"><a href="#cb7-5"></a>    eprint = {2101.00086},</span>
+<span id="cb7-6"><a href="#cb7-6"></a>    archiveprefix = {arXiv},</span>
+<span id="cb7-7"><a href="#cb7-7"></a>    primaryclass = {cs.MS},</span>
+<span id="cb7-8"><a href="#cb7-8"></a>    url = {https://arxiv.org/abs/2101.00086}</span>
+<span id="cb7-9"><a href="#cb7-9"></a>}</span></code></pre></div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a href="https://en.wikipedia.org/wiki/Euler_method" class="uri">https://en.wikipedia.org/wiki/Euler_method</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://en.wikipedia.org/wiki/Runge-Kutta_methods" class="uri">https://en.wikipedia.org/wiki/Runge-Kutta_methods</a><a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://CRAN.R-project.org/view=DifferentialEquations" class="uri">https://CRAN.R-project.org/view=DifferentialEquations</a><a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
