@@ -1,4 +1,4 @@
-0f2f29779b297dc141c82b6eb5f57ce5 *DESCRIPTION
+0751941857a7593eda00b97c7ffa8d77 *DESCRIPTION
 f71858faf1e96c99b7e0755f6ed0462f *NAMESPACE
 688a82391fe08fd822098dbbec410a46 *NEWS.md
 b5c85c07b551448be7d328a333563e5b *R/RcppExports.R
@@ -90,7 +90,7 @@ db872cf23268df2ea910c4513760d52d *src/RcppExports.cpp
 a4f7340a7ce175a27ea5cc042a64adf4 *tests/testthat/test-evaluate.R
 960d45cd6b19e5c2e1932bc9db74632d *tests/testthat/test-gradient.R
 e175842ab2863df68f2fff222b2277c4 *tests/testthat/test-hessian.R
-8813ec9178f47ce5771a095debdeba58 *tests/testthat/test-integral.R
+bd460751719817cf82687739802c402e *tests/testthat/test-integral.R
 46de36d9395bf241e20ca6a2c197c8b0 *tests/testthat/test-laplacian.R
 03427d0c42df4f78470aff9c5b8873d6 *tests/testthat/test-mx.R
 ddd299f5cd19d4c113cb5a5bdecb42ad *tests/testthat/test-mxdet.R
