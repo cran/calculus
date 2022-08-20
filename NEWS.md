@@ -1,3 +1,11 @@
+# calculus 0.3.4
+
+- fix CRAN check
+
+# calculus 0.3.3
+
+- fix CRAN check
+
 # calculus 0.3.2
 
 - faster computation of Hermite polynomials
